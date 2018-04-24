@@ -15,18 +15,22 @@ namespace HackerNewsApi.Controllers
 {
     public class HomeController : Controller
     {
-        private int _pageSize;
         private readonly IStoryRepository _repository;
+
+        public HomeController(IStoryRepository repository)
+        {
+            _repository = repository;
+        }
 
         public HomeController()
         {
-            this._pageSize = 10;
             this._repository = new StoryRepository();
         }
 
         public ActionResult Index(string searchString, string currentFilter, string sortOrder, int? page)
         {
-            List<Story> storyList = new List<Story>();
+            int _pageSize = 10;
+            var storyList = new List<Story>();
             var storiesCache = (List<Story>)MemoryCache.Default["StoriesCache"];
 
             ViewBag.AuthorSortParam = String.IsNullOrEmpty(sortOrder) ? "Author_desc" : "";
@@ -85,7 +89,7 @@ namespace HackerNewsApi.Controllers
             }
 
             storyList = Numbering.Get(storyList);
-            int pageNumber = (page ?? 1);
+            var pageNumber = (page ?? 1);
             return View(storyList.ToPagedList(pageNumber, _pageSize));
         }
     }
