@@ -1,0 +1,6 @@
+﻿body {padding-bottom: 20px;}
+.body-content {padding-top: 55px}
+.dl-horizontal dt {white-space: normal;}
+input,select,textarea {max-width: 280px;}
+
+footer { padding: 25px 0; background: #F2F4F4; border-top: solid 1px #e7e7e7 }

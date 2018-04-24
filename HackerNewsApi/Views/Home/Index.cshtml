@@ -1,0 +1,62 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+@model IPagedList<HackerNewsApi.Models.Story>
+
+<script src="~/Scripts/jquery-3.3.1.js"></script>
+<script src="~/Scripts/bootstrap.js"></script>
+<link href="~/Content/bootstrap.css" rel="stylesheet" />
+<link href="~/Content/PagedList.css" rel="stylesheet" />
+<link href="~/Content/Site.css" rel="stylesheet" />
+<script src="~/Scripts/modernizr-2.6.2.js"></script>
+
+@{
+    ViewBag.Title = "Home page";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <h4>Top 50 news items</h4>
+        <hr/>
+        <span>Find by author or title:</span>
+        @using (Html.BeginForm())
+        {
+            <div class="row">
+                <div class="col-md-12" style="padding-bottom: 25px">
+                    @Html.TextBox("SearchString", null, new {id = "searchBox", @class = "pull-left"})
+                    <input type="submit" class="pull-left" style="margin-left: 5px" value="search" />
+                </div>
+            </div>
+        }
+
+        <table class="table table-condensed table-striped">
+            <thead>
+            <tr>
+                <th style="width: 10px">No.</th>
+                <th>@Html.ActionLink("Author", "Index", new {sortOrder = ViewBag.AuthorSortParam})</th>
+                <th>@Html.ActionLink("Title", "Index", new {sortOrder = ViewBag.TitleSortParam})</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Number</td>
+                    <td>@item.Author</td>
+                    <td><a href="@item.Url" target="_blank">@item.Title</a></td>
+                </tr>
+            }
+            <tr>
+                <td colspan="3">
+                    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+                    @Html.PagedListPager(Model, page => Url.Action("index", new {page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter}))
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+    });
+</script>
